@@ -11,41 +11,62 @@ class Calc:
         self.__expension = exp
 
     def __putout(self, exp):
-        close = exp.index(')')
-        rev_exp = exp[:close]
-        po_exp = ''
-
-        for l in rev_exp[::-1]:
-            if l != '(':
-                po_exp += l
-            else:
-                break
-
-        return po_exp[::-1]
+        open = exp.rindex('(')+1
+        close = exp[open:].index(')') + open
+        po_exp = exp[open:close]
+        return po_exp
 
     def __small_calculate(self, exp):
-        exp = exp.split
+        if exp[0] == '-':
+            exp = f'0{exp}'
+
+        exp_num = exp
+        exp_symbols = ''
+        symbols = ['^', '*', '/', '+', '-']
+
+        for symbol in symbols:
+            exp_num = " ".join(exp_num.split(symbol))
+
+        exp_num = exp_num.split()
+
+        for e in exp:
+            if e in symbols:
+                exp_symbols += e
+        exp_symbols = list(exp_symbols)
+
+        for symbol in symbols:
+            while symbol in exp_symbols:
+                indx = exp_symbols.index(symbol)
+
+                if symbol == '^':
+                    res = float(exp_num[indx]) ** float(exp_num[indx + 1])
+                elif symbol == '*':
+                    res = float(exp_num[indx]) * float(exp_num[indx + 1])
+                elif symbol == '/':
+                    res = float(exp_num[indx]) / float(exp_num[indx + 1])
+                elif symbol == '+':
+                    res = float(exp_num[indx]) + float(exp_num[indx + 1])
+                elif symbol == '-':
+                    res = float(exp_num[indx]) - float(exp_num[indx + 1])
+
+                del exp_symbols[indx]
+                del exp_num[indx+1]
+                exp_num[indx] = res
+
+        return exp_num[0]
 
     def __calculate(self, exp):
-
-        exp = exp.split(['+', '-', '*', '/'])
-        print(exp)\
+        pass
 
     def calc(self):
-        exp = self.__putout(self.__expension)
-        self.__calculate(exp)
+        while '(' in self.__expension:
+            exp = self.__putout(self.__expension)
+            res = self.__small_calculate(exp)
+            exp = f'({exp})'
+            self.__expension = self.__expension.replace(str(exp), str(res))
 
-    def test(self):
-        string = "GeeksForGeeks, | is an-awesome! website"
-        delimiters = [",", "|", ";"]
+        return self.__small_calculate(self.__expension)
 
-        for delimiter in delimiters:
-            string = " ".join(string.split(delimiter))
 
-        result = string.split()
-
-        print(result)
-
-m = Calc('2+(10+10*12)')
-m.test()
-#m.calc()
+m = Calc(input('Введите выражение без пробелов:'))
+print(m.calc())
