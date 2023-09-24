@@ -5,21 +5,6 @@
 скобка, а слева от каждой закрывающей — соответствующаяей закрывающая).
 '''
 
-'''
-def analyser(txt):
-    txt_modified = ''
-
-    for x in txt:
-        if x in ['(', ')']:
-            txt_modified += x
-
-    if txt_modified.count('(') == txt_modified.count(')'):
-        for x in txt_modified:
-            
-
-txt = input()
-'''
-
 
 def check_brackets(txt):
     brackets = []

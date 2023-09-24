@@ -55,9 +55,6 @@ class Calc:
 
         return exp_num[0]
 
-    def __calculate(self, exp):
-        pass
-
     def calc(self):
         while '(' in self.__expension:
             exp = self.__putout(self.__expension)
